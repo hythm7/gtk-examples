@@ -25,6 +25,7 @@ $app.activate.tap({
  
   $app.window.add-events: GDK_ALL_EVENTS_MASK;
 
+  # Will be adding more event handling...
   $app.window.event.tap( -> ($win, $event, $data, $value) {
     given $event {
       event(cast(GdkEventKey,    $event)) when $event.type ~~ GDK_KEY_PRESS;
