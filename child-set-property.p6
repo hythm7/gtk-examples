@@ -26,6 +26,8 @@ $app.activate.tap({
   
   $grid.attach: $hello, $col0, 0, 1, 1;
   $grid.attach: $world, $col1, 0, 1, 1;
+  
+  say 'grid', $grid.get-children();
 
   $swap.clicked.tap: {
     ($col0, $col1) .= reverse;
@@ -40,6 +42,8 @@ $app.activate.tap({
   $box.pack_start($grid, False, True, 0);
   $box.pack_start($swap, False, True, 0);
   $box.pack_start($exit, False, True, 0);
+  
+  say 'box', $box.get-children();
 
   $app.window.add: $box;
   $app.show_all;

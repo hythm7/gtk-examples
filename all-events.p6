@@ -38,6 +38,8 @@ $app.activate.tap({
   my GTK::Button $w .= new_with_label: <w>;
   my GTK::Button $y .= new_with_label: <y>;
   my GTK::Button $z .= new_with_label: <z>;
+  
+  #$w.clicked.tap({ say .label});
  
   # $a.halign = GTK_ALIGN_FILL;
   #$a.valign = GTK_ALIGN_FILL;
@@ -52,23 +54,30 @@ $app.activate.tap({
   #$z.halign = GTK_ALIGN_FILL;
   #$z.valign = GTK_ALIGN_FILL;
   
-  $app.window.add-events: GDK_ALL_EVENTS_MASK;
+  my GTK::Grid $grid .= new;
+  $grid.add-events: GDK_KEY_PRESS_MASK +| GDK_BUTTON_PRESS_MASK;
 
   # Will be adding more event handling...
-  $app.window.event.tap( -> ($win, $event, $data, $value) {
+  $grid.event.tap( -> ($w, $event, $data, $value) {
+    say $w;
+    say $data.perl;
+    say $value;
     given $event.type {
-      event(GDK_KEY_PRESS,      cast(GdkEventKey,    $event)) when GDK_KEY_PRESS;
-      event(GDK_KEY_RELEASE,    cast(GdkEventKey,    $event)) when GDK_KEY_RELEASE;
-      event(GDK_BUTTON_PRESS,   cast(GdkEventButton, $event)) when GDK_BUTTON_PRESS;
-      event(GDK_BUTTON_RELEASE, cast(GdkEventButton, $event)) when GDK_BUTTON_RELEASE;
-      event(GDK_MOTION_NOTIFY,  cast(GdkEventMotion, $event)) when GDK_MOTION_NOTIFY;
+      event(GDK_KEY_PRESS,        cast(GdkEventKey,       $event).string) when GDK_KEY_PRESS;
+      #event(GDK_KEY_RELEASE,      cast(GdkEventKey,       $event)) when GDK_KEY_RELEASE;
+      event(GDK_BUTTON_PRESS,     cast(GdkEventButton,    $event)) when GDK_BUTTON_PRESS;
+      #event(GDK_BUTTON_RELEASE,   cast(GdkEventButton,    $event)) when GDK_BUTTON_RELEASE;
+      #event(GDK_2BUTTON_PRESS,    cast(GdkEventButton,    $event)) when GDK_2BUTTON_PRESS;
+      #event(GDK_SELECTION_NOTIFY, cast(GdkEventSelection, $event)) when GDK_SELECTION_REQUEST;
+      #event(GDK_SELECTION_NOTIFY, cast(GdkEventSelection, $event)) when GDK_SELECTION_NOTIFY;
+      #event(GDK_SELECTION_NOTIFY, cast(GdkEventSelection, $event)) when GDK_SELECTION_CLEAR;
+      #event(GDK_MOTION_NOTIFY,  cast(GdkEventMotion, $event)) when GDK_MOTION_NOTIFY;
     }
     $value.r = 0;
   }); 
 
   $exit.clicked.tap: { $app.exit  };
 
-  my GTK::Grid $grid .= new;
   $grid.halign = GTK_ALIGN_START;
   $grid.valign = GTK_ALIGN_START;
   $grid.row-homogeneous = True;
@@ -92,8 +101,8 @@ $app.activate.tap({
 
 $app.run;
 
-multi event (GDK_KEY_PRESS, GdkEventKey $event) {
-  say $event.string;
+multi event (GDK_KEY_PRESS, $key) {
+  say $key;
 }
 
 multi event (GDK_KEY_RELEASE, GdkEventKey $event) {
@@ -104,11 +113,19 @@ multi event (GDK_BUTTON_PRESS, GdkEventButton $event) {
   say $event.button;
 }
 
+multi event (GDK_2BUTTON_PRESS, GdkEventButton $event) {
+  say 2;
+}
+
 multi event (GDK_BUTTON_RELEASE, GdkEventButton $event) {
   say $event.button;
 }
 
+multi event (GDK_SELECTION_NOTIFY, GdkEventSelection $event) {
+  say $event.selection;
+}
+
 multi event (GDK_MOTION_NOTIFY, GdkEventMotion $event) {
-  say $event.state;
+  say $event;
 }
 
