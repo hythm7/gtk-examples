@@ -49,7 +49,7 @@ $app.activate.tap({
     $flowbox.remove-all();
     
     
-    #  Below commented code works fine, but with warning 
+    #  uncomment below code and comment the for loop,  it seems it will work fine, but with warning 
     #  'GTK_IS_WIDGET (widget)' failed when removing the widget.
     #  for everytime swap button is clicked( after first time)
     #
