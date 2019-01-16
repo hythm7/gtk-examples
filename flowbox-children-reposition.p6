@@ -38,9 +38,34 @@ $app.activate.tap({
   $flowbox.homogeneous = True;
   $flowbox.selection-mode = GTK_SELECTION_MULTIPLE;
 
-  $flowbox.add: $_ for @buttons;
+  for @buttons -> $btn  is copy {
+    my $child = GTK::FlowBoxChild.new();
+    $child.add: $btn;
+    $flowbox.add: $child;
+  }
   
-  $swap.clicked.tap: { ; };
+  $swap.clicked.tap: {
+    #$flowbox.get-children.map(*.get-child.remove); # This does not remove the widgets
+    $flowbox.remove-all();
+    
+    
+    #  Below commented code works fine, but with warning 
+    #  'GTK_IS_WIDGET (widget)' failed when removing the widget.
+    #  for everytime swap button is clicked( after first time)
+    #
+    #my $child = GTK::FlowBoxChild.new();
+    #my $button = GTK::Button.new_with_label: $++.Str;
+    #$child.add: $button;
+    #$flowbox.add: $child;
+    
+    for @buttons -> $newbtn is copy {
+      my $child = GTK::FlowBoxChild.new();
+      $child.add: $newbtn;
+      $flowbox.add: $child;
+    }
+    
+    $flowbox.show-all();
+  }
 
   
   my $box = GTK::Box.new-vbox();
